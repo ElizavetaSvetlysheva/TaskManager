@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>TaskManager.WPF</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TaskManager.Core\TaskManager.Core.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\app_icon.png"/>
+  </ItemGroup>
+</Project>

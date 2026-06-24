@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TaskManager.Core.Models.TaskItem">
+    <Position X="1.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACCAAEABAgAGAEACAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Models\TaskItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TaskManager.Core.Models.TaskStatistics">
+    <Position X="5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAACIAAAEBAAAAAAQAQAAAAgAAABAAAAA=</HashCode>
+      <FileName>Models\TaskStatistics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TaskManager.Core.Services.JsonTaskRepository">
+    <Position X="3.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AA4AAAAgAQAAAAAAAAAAAAAAAAEAAAAAAgAEAAAAEIA=</HashCode>
+      <FileName>Services\JsonTaskRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TaskManager.Core.Services.TaskService">
+    <Position X="7" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIACBgAAQAAAAAAAAAQAQAAFAAAAAABgAAAAAgEAA=</HashCode>
+      <FileName>Services\TaskService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="TaskManager.Core.Interfaces.ITaskRepository">
+    <Position X="8.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAgAAAAAAAAAAAAAAAAAAEAAAAAAgAAAAAAEIA=</HashCode>
+      <FileName>Interfaces\ITaskRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TaskManager.Core.Interfaces.ITaskService">
+    <Position X="9" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIACBgAAQAAAAAAAAAAAQAAFAAAAAABgAAAAAgEAA=</HashCode>
+      <FileName>Interfaces\ITaskService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="TaskManager.Core.Models.TaskStatus">
+    <Position X="7" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACIAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Models\TaskItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TaskManager.Core.Models.TaskPriority">
+    <Position X="3.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAgAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Models\TaskItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

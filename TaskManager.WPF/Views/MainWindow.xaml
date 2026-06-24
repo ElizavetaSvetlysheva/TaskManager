@@ -1,0 +1,911 @@
+<Window x:Class="TaskManager.WPF.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:TaskManager.WPF.ViewModels"
+        xmlns:conv="clr-namespace:TaskManager.WPF.Converters"
+        Title="Планировщик задач" Height="700" Width="1060"
+        Background="#FDF6EE"
+        FontFamily="Segoe UI" FontSize="13"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <conv:BoolToVisibilityConverter  x:Key="BoolVis"/>
+        <conv:PriorityConverter          x:Key="PriConv"/>
+        <conv:StatusConverter            x:Key="StConv"/>
+        <conv:OverdueBrushConverter      x:Key="OvBrush"/>
+        <conv:ImportantStarConverter     x:Key="StarConv"/>
+        <conv:PriorityBackConverter      x:Key="PriBg"/>
+        <conv:PriorityForeConverter      x:Key="PriFg"/>
+        <conv:StatusBackConverter        x:Key="StBg"/>
+        <conv:StatusForeConverter        x:Key="StFg"/>
+
+        <Style x:Key="HBtn" TargetType="Button">
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Padding"         Value="14,8"/>
+            <Setter Property="Margin"          Value="4,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Opacity" Value=".82"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value=".4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TBtn" TargetType="Button">
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="Padding"         Value="12,6"/>
+            <Setter Property="Margin"          Value="3,0"/>
+            <Setter Property="Background"      Value="#EFE0CC"/>
+            <Setter Property="Foreground"      Value="#5C5048"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush"     Value="#D9BFA0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#E0D5C5"/>
+                                <Setter Property="Foreground" Value="#2E2820"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value=".4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TDangerBtn" TargetType="Button" BasedOn="{StaticResource TBtn}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background"  Value="#FEEAE0"/>
+                    <Setter Property="Foreground"  Value="#C0392B"/>
+                    <Setter Property="BorderBrush" Value="#E8B4A8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="TCombo" TargetType="ComboBox">
+            <Setter Property="Margin"          Value="3,0"/>
+            <Setter Property="Padding"         Value="8,5"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="Foreground"      Value="#5C5048"/>
+            <Setter Property="Background"      Value="#EFE0CC"/>
+            <Setter Property="BorderBrush"     Value="#D9BFA0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="TabSt" TargetType="TabItem">
+            <Setter Property="Padding"         Value="20,12"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Foreground"      Value="#A8998A"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="Bd"
+                                Background="Transparent"
+                                BorderThickness="0,0,0,2"
+                                BorderBrush="Transparent"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter ContentSource="Header"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#3D4E6B"/>
+                                <Setter Property="Foreground" Value="#3D4E6B"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#5C6E8A"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ColHdr" TargetType="TextBlock">
+            <Setter Property="Foreground"  Value="#B89878"/>
+            <Setter Property="FontSize"    Value="9.5"/>
+            <Setter Property="FontWeight"  Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin"      Value="8,0"/>
+        </Style>
+
+        <Style x:Key="RowSt" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding"         Value="0"/>
+            <Setter Property="Margin"          Value="0"/>
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush"     Value="#EDD8C0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F0EBE3"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E8E0D0"/>
+                    <Setter Property="BorderBrush" Value="#C8A880"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StatCard" TargetType="Border">
+            <Setter Property="Background"      Value="#FDFAF6"/>
+            <Setter Property="CornerRadius"    Value="8"/>
+            <Setter Property="BorderBrush"     Value="#E5CEBC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"         Value="18,14"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="58"/>
+          
+            <RowDefinition Height="Auto"/>
+            
+            <RowDefinition Height="64"/>
+          
+            <RowDefinition Height="Auto"/>
+           
+            <RowDefinition Height="Auto"/>
+            
+            <RowDefinition Height="*"/>
+            
+            <RowDefinition Height="28"/>
+         
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="#FFFBF4">
+            <Border BorderBrush="#3D4E6B" BorderThickness="3,0,0,0">
+                <Grid Margin="16,0,16,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="pack://application:,,,/Assets/app_icon.png"
+                               Width="42" Height="42"
+                               Margin="0,0,10,0"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Планировщик"
+                                       Foreground="#2C2018"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       LineHeight="16"/>
+                            <TextBlock Text="задач"
+                                       Foreground="#B09070"
+                                       FontSize="10" FontWeight="Normal"
+                                       LineHeight="14"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="{Binding BackButtonLabel, Mode=OneWay}"
+                                Style="{StaticResource HBtn}"
+                                Background="#EFE0CC" Foreground="#5C5048"
+                                Visibility="{Binding CanGoBack, Mode=OneWay, Converter={StaticResource BoolVis}}"
+                                Command="{Binding BackCommand, Mode=OneWay}"/>
+                        <Button Content="💾  Сохранить"
+                                Style="{StaticResource HBtn}"
+                                Background="#EFE0CC" Foreground="#5C5048"
+                                Command="{Binding SaveCommand, Mode=OneWay}"/>
+                        <Button Content="📂  Открыть"
+                                Style="{StaticResource HBtn}"
+                                Background="#EFE0CC" Foreground="#5C5048"
+                                Command="{Binding LoadCommand, Mode=OneWay}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+
+        <Border Grid.Row="1"
+                Background="#FFFBF4"
+                BorderBrush="#EDD8C0" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TabControl Grid.Column="0"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            ItemContainerStyle="{StaticResource TabSt}"
+                            SelectedIndex="{Binding SelectedTab}"
+                            Margin="14,0,0,0">
+                    <TabItem Header="≡  Список задач"/>
+                    <TabItem Header="◎  Статистика"/>
+                </TabControl>
+
+                <ItemsControl Grid.Column="1"
+                              ItemsSource="{Binding OpenEditors}"
+                              VerticalAlignment="Stretch">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="EditorTab"
+                                    BorderThickness="0,0,0,2"
+                                    BorderBrush="Transparent"
+                                    Padding="14,0,6,0"
+                                    Cursor="Hand"
+                                    VerticalAlignment="Stretch">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                <Setter Property="BorderBrush" Value="#3D4E6B"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding TabTitle}"
+                                               FontSize="12" FontWeight="SemiBold"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,6,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#A8998A"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter Property="Foreground" Value="#3D4E6B"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                   
+                                    <Button Content="✕"
+                                            FontSize="10"
+                                            Foreground="#C8A888"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="2,0"
+                                            Cursor="Hand"
+                                            VerticalAlignment="Center"
+                                            Command="{Binding CloseEditorCommand}">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="Bd" Background="Transparent"
+                                                        CornerRadius="3" Padding="3,1">
+                                                    <ContentPresenter/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Bd" Property="Background" Value="#E5CEBC"/>
+                                                        <Setter Property="Foreground" Value="#5C5048"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                </StackPanel>
+                                <Border.InputBindings>
+                                    <MouseBinding Gesture="LeftClick"
+                                                  Command="{Binding DataContext.ActivateEditorCommand,
+                                                            RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{Binding}"/>
+                                </Border.InputBindings>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Background="#FDF6EE"
+                BorderBrush="#EDD8C0" BorderThickness="0,0,0,1"
+                Visibility="{Binding IsTasksTabVisible, Mode=OneWay, Converter={StaticResource BoolVis}}">
+            <UniformGrid Rows="1">
+
+                <Border BorderBrush="#EDD8C0" BorderThickness="0,0,1,0">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Stats.Total, Mode=OneWay}"
+                                   Foreground="#2C2018"
+                                   FontSize="22" FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="всего"
+                                   Foreground="#B89878" FontSize="10"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="#EDD8C0" BorderThickness="0,0,1,0">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Stats.New, Mode=OneWay}"
+                                   Foreground="#3D4E6B"
+                                   FontSize="22" FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="новые"
+                                   Foreground="#B89878" FontSize="10"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="#EDD8C0" BorderThickness="0,0,1,0">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Stats.InProgress, Mode=OneWay}"
+                                   Foreground="#B07030"
+                                   FontSize="22" FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="в работе"
+                                   Foreground="#B89878" FontSize="10"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="#EDD8C0" BorderThickness="0,0,1,0">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Stats.Completed, Mode=OneWay}"
+                                   Foreground="#3A7A50"
+                                   FontSize="22" FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="завершены"
+                                   Foreground="#B89878" FontSize="10"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="#EDD8C0" BorderThickness="0,0,1,0">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Stats.Overdue, Mode=OneWay}"
+                                   Foreground="#C0392B"
+                                   FontSize="22" FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="просрочены"
+                                   Foreground="#B89878" FontSize="10"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Stats.Important, Mode=OneWay}"
+                               Foreground="#8B5E2A"
+                               FontSize="22" FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="важные"
+                               Foreground="#B89878" FontSize="10"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+            </UniformGrid>
+        </Border>
+
+        <Border Grid.Row="3"
+                Background="#F5E8D8"
+                BorderBrush="#E5CEBC" BorderThickness="0,0,0,1"
+                Padding="14,7"
+                Visibility="{Binding IsTasksTabVisible, Mode=OneWay, Converter={StaticResource BoolVis}}">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="＋  Добавить задачу"
+                        Style="{StaticResource TBtn}"
+                        Background="#3D4E6B" Foreground="#EEF2FA"
+                        BorderBrush="#3D4E6B"
+                        Padding="14,6"
+                        Command="{Binding AddCommand, Mode=OneWay}"/>
+                <Button Content="✎  Изменить"
+                        Style="{StaticResource TBtn}"
+                        Command="{Binding EditCommand, Mode=OneWay}"/>
+                <Button Content="✕  Удалить"
+                        Style="{StaticResource TDangerBtn}"
+                        Command="{Binding DeleteCommand, Mode=OneWay}"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="4"
+                Background="#FFFBF4"
+                BorderBrush="#EDD8C0" BorderThickness="0,0,0,1"
+                Padding="14,7"
+                Visibility="{Binding IsTasksTabVisible, Mode=OneWay, Converter={StaticResource BoolVis}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal"
+                            VerticalAlignment="Center" Margin="0,0,6,0">
+                    <TextBlock Text="Статус:"
+                               Foreground="#B09070" FontSize="11"
+                               VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <ComboBox Style="{StaticResource TCombo}"
+                              Width="120"
+                              ItemsSource="{Binding StatusOptions, Mode=OneWay}"
+                              SelectedItem="{Binding StatusFilter}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal"
+                            VerticalAlignment="Center" Margin="0,0,6,0">
+                    <TextBlock Text="Приоритет:"
+                               Foreground="#B09070" FontSize="11"
+                               VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <ComboBox Style="{StaticResource TCombo}"
+                              Width="127"
+                              ItemsSource="{Binding PriorityOptions, Mode=OneWay}"
+                              SelectedItem="{Binding PriorityFilter}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal"
+                            VerticalAlignment="Center" Margin="0,0,6,0">
+                    <TextBlock Text="Порядок:"
+                               Foreground="#B09070" FontSize="11"
+                               VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <ComboBox Style="{StaticResource TCombo}"
+                              Width="145"
+                              ItemsSource="{Binding SortOptions, Mode=OneWay}"
+                              SelectedItem="{Binding SortMode}"/>
+                </StackPanel>
+
+                <Border Grid.Column="3"
+                        Background="#EFE0CC"
+                        BorderBrush="#D9BFA0" BorderThickness="1"
+                        CornerRadius="4" Padding="8,5"
+                        Margin="6,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Text="🔍" FontSize="11"
+                                   Foreground="#B89878"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,6,0"/>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 Foreground="#5C5048"
+                                 CaretBrush="#3D4E6B"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="12"/>
+                    </Grid>
+                </Border>
+
+                <Button Grid.Column="4"
+                        Content="✕  Сбросить"
+                        Style="{StaticResource TBtn}"
+                        Foreground="#B09070"
+                        Command="{Binding ClearFilterCommand, Mode=OneWay}"
+                        Margin="6,0,0,0"/>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="5">
+
+            <DockPanel Visibility="{Binding IsListVisible, Mode=OneWay, Converter={StaticResource BoolVis}}">
+
+                <Border DockPanel.Dock="Top"
+                        Background="#F5E8D8"
+                        BorderBrush="#E5CEBC" BorderThickness="0,0,0,1"
+                        Padding="14,0">
+                    <Grid Height="30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="110"/>
+                            <ColumnDefinition Width="92"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="1" Text="НАЗВАНИЕ"  Style="{StaticResource ColHdr}"/>
+                        <TextBlock Grid.Column="2" Text="ОПИСАНИЕ"  Style="{StaticResource ColHdr}"/>
+                        <TextBlock Grid.Column="3" Text="ПРИОРИТЕТ" Style="{StaticResource ColHdr}"/>
+                        <TextBlock Grid.Column="4" Text="СТАТУС"    Style="{StaticResource ColHdr}"/>
+                        <TextBlock Grid.Column="5" Text="СРОК"      Style="{StaticResource ColHdr}"/>
+                    </Grid>
+                </Border>
+
+                <ListView ItemsSource="{Binding Tasks, Mode=OneWay}"
+                          SelectedItem="{Binding SelectedTask}"
+                          Background="#FDF6EE"
+                          BorderThickness="0"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ItemContainerStyle="{StaticResource RowSt}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="14,0" Height="48">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="24"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="110"/>
+                                    <ColumnDefinition Width="92"/>
+                                </Grid.ColumnDefinitions>
+                          
+                                <TextBlock Grid.Column="0"
+                                           Text="{Binding IsImportant, Mode=OneWay, Converter={StaticResource StarConv}}"
+                                           Foreground="#E8612A"
+                                           FontSize="14"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Title, Mode=OneWay}"
+                                           Foreground="{Binding IsOverdue, Mode=OneWay, Converter={StaticResource OvBrush}}"
+                                           FontWeight="SemiBold" FontSize="13"
+                                           VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis"
+                                           Margin="8,0"/>
+
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding Description, Mode=OneWay}"
+                                           Foreground="#B09070"
+                                           FontSize="12"
+                                           VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis"
+                                           Margin="8,0"/>
+
+                                <Border Grid.Column="3"
+                                        Background="{Binding Priority, Mode=OneWay, Converter={StaticResource PriBg}}"
+                                        CornerRadius="3" Padding="8,3"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Margin="8,0">
+                                    <TextBlock
+                                        Text="{Binding Priority, Mode=OneWay, Converter={StaticResource PriConv}}"
+                                        Foreground="{Binding Priority, Mode=OneWay, Converter={StaticResource PriFg}}"
+                                        FontSize="11" FontWeight="Bold"/>
+                                </Border>
+
+                                <Border Grid.Column="4"
+                                        Background="{Binding Status, Mode=OneWay, Converter={StaticResource StBg}}"
+                                        CornerRadius="3" Padding="8,3"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Margin="8,0">
+                                    <TextBlock
+                                        Text="{Binding Status, Mode=OneWay, Converter={StaticResource StConv}}"
+                                        Foreground="{Binding Status, Mode=OneWay, Converter={StaticResource StFg}}"
+                                        FontSize="11" FontWeight="SemiBold"/>
+                                </Border>
+
+                                <TextBlock Grid.Column="5"
+                                           Text="{Binding DueDate, Mode=OneWay, StringFormat={}{0:dd.MM.yyyy}}"
+                                           Foreground="{Binding IsOverdue, Mode=OneWay, Converter={StaticResource OvBrush}}"
+                                           FontSize="12"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick"
+                                      Command="{Binding EditCommand, Mode=OneWay}"/>
+                    </ListView.InputBindings>
+                </ListView>
+            </DockPanel>
+
+            <ScrollViewer Visibility="{Binding IsEditorVisible, Mode=OneWay, Converter={StaticResource BoolVis}}"
+                          VerticalScrollBarVisibility="Auto"
+                          Background="#FDF6EE">
+                <StackPanel DataContext="{Binding ActiveEditor}"
+                            Margin="32,24,32,32" MaxWidth="640"
+                            HorizontalAlignment="Left">
+
+                    <TextBlock Text="{Binding TabTitle}"
+                               FontSize="18" FontWeight="SemiBold"
+                               Foreground="#2C2018" Margin="0,0,0,24"/>
+
+                    <TextBlock Text="НАЗВАНИЕ *"
+                               FontSize="9.5" FontWeight="Bold"
+                               Foreground="#B89878" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding TaskVm.Title, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="10,8" BorderBrush="#D9BFA0" BorderThickness="1"
+                             Background="#FFFBF4" Foreground="#2C2018"
+                             FontSize="13"/>
+
+                    <TextBlock Text="{Binding ErrorText}"
+                               Foreground="#C0392B" FontSize="11"
+                               Margin="0,4,0,0"
+                               Visibility="{Binding HasVisibleError, Converter={StaticResource BoolVis}}"/>
+
+                    <TextBlock Text="ОПИСАНИЕ"
+                               FontSize="9.5" FontWeight="Bold"
+                               Foreground="#B89878" Margin="0,16,0,5"/>
+                    <TextBox Text="{Binding TaskVm.Description, UpdateSourceTrigger=PropertyChanged}"
+                             Height="90" TextWrapping="Wrap" AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"
+                             Padding="10,8" BorderBrush="#D9BFA0" BorderThickness="1"
+                             Background="#FFFBF4" Foreground="#2C2018"
+                             FontSize="13"/>
+
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="ПРИОРИТЕТ"
+                                       FontSize="9.5" FontWeight="Bold"
+                                       Foreground="#B89878" Margin="0,0,0,5"/>
+                            <ComboBox ItemsSource="{x:Static vm:TaskItemViewModel.PriorityList}"
+                                      SelectedItem="{Binding TaskVm.PriorityRu}"
+                                      Padding="8,6" Background="#FFFBF4"
+                                      BorderBrush="#D9BFA0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="СТАТУС"
+                                       FontSize="9.5" FontWeight="Bold"
+                                       Foreground="#B89878" Margin="0,0,0,5"/>
+                            <ComboBox ItemsSource="{x:Static vm:TaskItemViewModel.StatusList}"
+                                      SelectedItem="{Binding TaskVm.StatusRu}"
+                                      Padding="8,6" Background="#FFFBF4"
+                                      BorderBrush="#D9BFA0"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock Text="СРОК ВЫПОЛНЕНИЯ"
+                               FontSize="9.5" FontWeight="Bold"
+                               Foreground="#B89878" Margin="0,16,0,5"/>
+                    <DatePicker SelectedDate="{Binding TaskVm.DueDate}"
+                                Background="#FFFBF4" BorderBrush="#D9BFA0"
+                                Padding="4"/>
+
+                    <CheckBox Content="★  Важная задача"
+                              IsChecked="{Binding TaskVm.IsImportant}"
+                              Margin="0,16,0,0" FontSize="13"
+                              Foreground="#5C5048" Cursor="Hand"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,28,0,0">
+                        <Button Content="💾  Сохранить"
+                                Command="{Binding SaveEditorCommand}"
+                                Padding="16,9" Cursor="Hand"
+                                Background="#3D4E6B" Foreground="#EEF2FA"
+                                BorderThickness="0" FontSize="13" FontWeight="SemiBold">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                            CornerRadius="5" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Opacity" Value=".85"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Content="Отмена"
+                                Command="{Binding CloseEditorCommand}"
+                                Padding="16,9" Margin="10,0,0,0" Cursor="Hand"
+                                Background="#EFE0CC" Foreground="#5C5048"
+                                BorderThickness="1" BorderBrush="#D9BFA0" FontSize="13">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="5" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="#E0D5C5"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer Visibility="{Binding IsStatsTabVisible, Mode=OneWay, Converter={StaticResource BoolVis}}"
+                          VerticalScrollBarVisibility="Auto"
+                          Background="#FDF6EE">
+                <StackPanel Margin="18" MaxWidth="880">
+
+                    <UniformGrid Rows="1" Columns="3" Margin="0,0,0,14">
+
+                        <Border Style="{StaticResource StatCard}" Margin="0,0,8,0">
+                            <StackPanel>
+                                <TextBlock Text="ВЫПОЛНЕНО ЗАДАЧ"
+                                           Foreground="#B89878" FontSize="10" FontWeight="Bold"
+                                           Margin="0,0,0,8"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                    <TextBlock Text="{Binding Stats.Completed, Mode=OneWay}"
+                                               Foreground="#3A7A50"
+                                               FontSize="30" FontWeight="Bold"/>
+                                    <TextBlock Margin="8,10,0,0" FontSize="13" Foreground="#B89878">
+                                        <Run Text="из "/>
+                                        <Run Text="{Binding Stats.Total, Mode=OneWay}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                <TextBlock Foreground="#B09070" FontSize="11" Margin="0,0,0,10">
+                                    <Run Text="{Binding CompletedPercent, Mode=OneWay}"/><Run Text="% завершено"/>
+                                </TextBlock>
+                                <Border Height="4" CornerRadius="2" Background="#DDD8D0">
+                                    <Border HorizontalAlignment="Left" Height="4" CornerRadius="2"
+                                            Background="#3A7A50"
+                                            Width="{Binding CompletedBarWidth, Mode=OneWay}"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource StatCard}" Margin="4,0">
+                            <StackPanel>
+                                <TextBlock Text="ПРОСРОЧЕНО ЗАДАЧ"
+                                           Foreground="#B89878" FontSize="10" FontWeight="Bold"
+                                           Margin="0,0,0,8"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                    <TextBlock Text="{Binding Stats.Overdue, Mode=OneWay}"
+                                               Foreground="#C0392B"
+                                               FontSize="30" FontWeight="Bold"/>
+                                    <TextBlock Margin="8,10,0,0" FontSize="13" Foreground="#B89878">
+                                        <Run Text="из "/>
+                                        <Run Text="{Binding Stats.Total, Mode=OneWay}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                <TextBlock Foreground="#B09070" FontSize="11" Margin="0,0,0,10">
+                                    <Run Text="{Binding OverduePercent, Mode=OneWay}"/><Run Text="% просрочено"/>
+                                </TextBlock>
+                                <Border Height="4" CornerRadius="2" Background="#DDD8D0">
+                                    <Border HorizontalAlignment="Left" Height="4" CornerRadius="2"
+                                            Background="#C0392B"
+                                            Width="{Binding OverdueBarWidth, Mode=OneWay}"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource StatCard}" Margin="8,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="В ПРОЦЕССЕ"
+                                           Foreground="#B89878" FontSize="10" FontWeight="Bold"
+                                           Margin="0,0,0,8"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                    <TextBlock Text="{Binding Stats.InProgress, Mode=OneWay}"
+                                               Foreground="#B07030"
+                                               FontSize="30" FontWeight="Bold"/>
+                                    <TextBlock Margin="8,10,0,0" FontSize="13" Foreground="#B89878">
+                                        <Run Text="из "/>
+                                        <Run Text="{Binding Stats.Total, Mode=OneWay}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                <TextBlock Foreground="#B09070" FontSize="11" Margin="0,0,0,10">
+                                    <Run Text="{Binding InProgressPercent, Mode=OneWay}"/><Run Text="% в работе"/>
+                                </TextBlock>
+                                <Border Height="4" CornerRadius="2" Background="#DDD8D0">
+                                    <Border HorizontalAlignment="Left" Height="4" CornerRadius="2"
+                                            Background="#B07030"
+                                            Width="{Binding InProgressBarWidth, Mode=OneWay}"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <Border Style="{StaticResource StatCard}">
+                        <StackPanel>
+                            <TextBlock Text="РАСПРЕДЕЛЕНИЕ ПО ПРИОРИТЕТАМ"
+                                       Foreground="#B89878" FontSize="10" FontWeight="Bold"
+                                       Margin="0,0,0,16"/>
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Высокий" Foreground="#8A7060" FontSize="12" VerticalAlignment="Center"/>
+                                <Border Grid.Column="1" Height="5" CornerRadius="2.5"
+                                        Background="#EDD8C0" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border HorizontalAlignment="Left" Height="5" CornerRadius="2.5"
+                                            Background="#C0392B"
+                                            Width="{Binding HighPriorityBarWidth, Mode=OneWay}"/>
+                                </Border>
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding Stats.HighPriority, Mode=OneWay}"
+                                           Foreground="#8A7060" FontSize="12" FontWeight="Bold"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Средний" Foreground="#8A7060" FontSize="12" VerticalAlignment="Center"/>
+                                <Border Grid.Column="1" Height="5" CornerRadius="2.5"
+                                        Background="#EDD8C0" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border HorizontalAlignment="Left" Height="5" CornerRadius="2.5"
+                                            Background="#B07030"
+                                            Width="{Binding MedPriorityBarWidth, Mode=OneWay}"/>
+                                </Border>
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding Stats.MedPriority, Mode=OneWay}"
+                                           Foreground="#8A7060" FontSize="12" FontWeight="Bold"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Низкий" Foreground="#8A7060" FontSize="12" VerticalAlignment="Center"/>
+                                <Border Grid.Column="1" Height="5" CornerRadius="2.5"
+                                        Background="#EDD8C0" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border HorizontalAlignment="Left" Height="5" CornerRadius="2.5"
+                                            Background="#3A7A50"
+                                            Width="{Binding LowPriorityBarWidth, Mode=OneWay}"/>
+                                </Border>
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding Stats.LowPriority, Mode=OneWay}"
+                                           Foreground="#8A7060" FontSize="12" FontWeight="Bold"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <Border Grid.Row="6"
+                Background="#EFE0CC"
+                BorderBrush="#D9BFA0" BorderThickness="0,1,0,0"
+                Padding="16,0">
+            <Grid>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="5" Height="5" Fill="#3A7A50"
+                             VerticalAlignment="Center" Margin="0,0,7,0"/>
+                    <TextBlock Text="{Binding StatusBarText, Mode=OneWay}"
+                               Foreground="#B09070" FontSize="10"/>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
